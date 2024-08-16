@@ -21,4 +21,3 @@ dependencyResolutionManagement {
 
 rootProject.name = "TodosC40"
 include(":app")
- 
