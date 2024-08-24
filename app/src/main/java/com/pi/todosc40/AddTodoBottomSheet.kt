@@ -1,21 +1,18 @@
 package com.pi.todosc40
 
 import android.app.DatePickerDialog
-import android.app.DatePickerDialog.OnDateSetListener
 import android.os.Bundle
-import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.DatePicker
-import androidx.core.widget.addTextChangedListener
-
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.pi.todosc40.database.MyDataBase
+import com.pi.todosc40.database.entity.Todo
 import com.pi.todosc40.databinding.BottomSheetAddTodoBinding
-import java.time.Year
+import com.pi.todosc40.utils.clearTime
 import java.util.Calendar
 
-class AddTodoBottomSheet : BottomSheetDialogFragment() {
+class AddTodoBottomSheet(val onAddClick: () -> Unit) : BottomSheetDialogFragment() {
     lateinit var binding: BottomSheetAddTodoBinding
     var selectedDay = Calendar.getInstance()
 
@@ -32,28 +29,45 @@ class AddTodoBottomSheet : BottomSheetDialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initDatePickerDialog()
-        binding.titleTextInputLayout.editText?.addTextChangedListener {
-            isValidInputs()
-        }
+        initListeners()
+        updateDateTextView()
     }
 
-    fun isValidInputs(): Boolean{
+    private fun initListeners() {
+        binding.addButton.setOnClickListener {
+            if (!isValidInputs()) return@setOnClickListener
+            selectedDay.clearTime()
+            val title = binding.titleTextInputLayout.editText!!.text.toString()
+            val description = binding.descriptionTextInputLayout.editText!!.text.toString()
+            val newTodo = Todo(
+                title = title, description = description,
+                date = selectedDay.timeInMillis,
+                isDone = false
+            )
+            MyDataBase.getInstance(requireContext()).getTodosDao().addTodo(newTodo)
+            onAddClick.invoke()
+            dismiss()
+        }
+
+    }
+
+    private fun isValidInputs(): Boolean {
         val title = binding.titleTextInputLayout.editText!!.text
         val description = binding.descriptionTextInputLayout.editText!!.text
         var isValid = true
-        if(title.isNullOrEmpty()){
+        if (title.isNullOrEmpty()) {
             binding.titleTextInputLayout.error = "Please enter valid title"
             isValid = false
-        }else {
+        } else {
             binding.titleTextInputLayout.error = null
         }
-        if(description.isNullOrEmpty()){
+        if (description.isNullOrEmpty()) {
             binding.descriptionTextInputLayout.error = "Please enter valid description"
-            isValid = false;
-        }else {
+            isValid = false
+        } else {
             binding.descriptionTextInputLayout.error = null
         }
-        return isValid;
+        return isValid
     }
 
     private fun initDatePickerDialog() {

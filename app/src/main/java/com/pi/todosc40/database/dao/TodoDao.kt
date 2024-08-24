@@ -20,4 +20,7 @@ abstract class TodoDao {
 
     @Query("select * from Todo")
     abstract fun getTodos(): List<Todo>
+
+    @Query("select * from Todo where date = :date  ")
+    abstract fun getTodosByDate(date: Long): List<Todo>
 }

@@ -14,10 +14,10 @@ abstract class MyDataBase: RoomDatabase() {
 
         fun getInstance(context: Context): MyDataBase{
             if(myDataBase == null){
-                Room.databaseBuilder(
+                myDataBase = Room.databaseBuilder(
                     context,
                     MyDataBase::class.java, "todos database"
-                ).build()
+                ).allowMainThreadQueries().fallbackToDestructiveMigration().build()
             }
             return myDataBase!!;
         }

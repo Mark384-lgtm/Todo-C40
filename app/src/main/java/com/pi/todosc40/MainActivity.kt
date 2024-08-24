@@ -1,29 +1,37 @@
 package com.pi.todosc40
 
 import android.os.Bundle
-import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import com.pi.todosc40.databinding.ActivityMainBinding
+import com.pi.todosc40.tabs.list_fragment.TodoListFragment
 
 class MainActivity : AppCompatActivity() {
     lateinit var binding: ActivityMainBinding
+    var listFragment = TodoListFragment()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        showListFragment()
         binding.fab.setOnClickListener {
-            val addTodoBottomSheet = AddTodoBottomSheet()
+            val addTodoBottomSheet = AddTodoBottomSheet {
+                listFragment.refreshTodos()
+            }
             addTodoBottomSheet.show(supportFragmentManager, null)
         }
-        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-              
+        binding.bottomNavigation.setOnItemSelectedListener {
+            if (it.itemId == R.id.settingsTab) {
+                return@setOnItemSelectedListener false
+            } else {
+                showListFragment()
             }
-        })
+            return@setOnItemSelectedListener true
+        }
     }
 
-    override fun onBackPressed() {
-        super.onBackPressed()
-
+    private fun showListFragment() {
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.fragmentContainer, listFragment)
+            .commit()
     }
 }
