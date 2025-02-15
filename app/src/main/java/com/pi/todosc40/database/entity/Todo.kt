@@ -1,9 +1,12 @@
 package com.pi.todosc40.database.entity
 
+import android.os.Parcelable
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import kotlinx.parcelize.Parcelize
 
+@Parcelize
 @Entity
 data class Todo(
     @PrimaryKey(autoGenerate = true)
@@ -17,4 +20,4 @@ data class Todo(
     var date: Long,
     @ColumnInfo
     var isDone: Boolean,
-)
+):Parcelable

@@ -15,7 +15,6 @@
         app:mcv_calendarMode="week"
         app:mcv_selectionColor="@color/blue"
         app:mcv_showOtherDates="all"
-
         />
 
     <androidx.recyclerview.widget.RecyclerView

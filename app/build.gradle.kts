@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
     id("com.google.devtools.ksp") version "1.9.0-1.0.13"
+    id ("kotlin-parcelize")
 }
 
 android {
@@ -47,6 +48,7 @@ dependencies {
     implementation(libs.room.runtime)
     implementation(libs.calendar.view)
     implementation(libs.swipe.layout)
+    implementation(libs.androidx.appcompat)
     // To use Kotlin annotation processing tool (kapt)
     ksp(libs.room.compiler)
     testImplementation(libs.junit)
