@@ -10,7 +10,7 @@ import com.pi.todosc40.TodosAdapter
 import com.pi.todosc40.database.MyDataBase
 import com.pi.todosc40.database.entity.Todo
 import com.pi.todosc40.databinding.FragmentTodoListBinding
-import com.pi.todosc40.utils.EditTaskActivity
+import com.pi.todosc40.EditTaskActivity
 import com.pi.todosc40.utils.clearTime
 import com.prolificinteractive.materialcalendarview.CalendarDay
 import java.util.Calendar
@@ -41,6 +41,11 @@ class TodoListFragment : Fragment() {
         initRecyclerView()
         refreshTodos()
         initCalendarListener()
+    }
+
+    override fun onStart() {
+        super.onStart()
+        refreshTodos()
     }
 
     private fun initCalendarListener() {
@@ -81,17 +86,12 @@ class TodoListFragment : Fragment() {
             override fun onItemViewClick(todo: Todo) {
                 val intent = Intent(context, EditTaskActivity::class.java)
                 intent.putExtra(EditTaskActivity.ObjectTodo, todo)
-                notifyAdapter()
+
                 startActivity(intent)
             }
 
         }
         binding.todosRecyclerView.adapter = todosAdapter
     }
-
-     fun notifyAdapter() {
-        EditTaskActivity.onsavebuttonclick = EditTaskActivity.onSaveButtonClick {
-            refreshTodos()
-        }
-    }
+    
 }

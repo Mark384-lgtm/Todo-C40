@@ -1,17 +1,13 @@
 package com.pi.todosc40
 
-import android.annotation.SuppressLint
-import android.graphics.Color
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView.Adapter
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
-import androidx.viewbinding.ViewBinding
 import com.pi.todosc40.database.entity.Todo
 import com.pi.todosc40.databinding.ItemTodoBinding
-import com.pi.todosc40.utils.EditTaskActivity
 
 class TodosAdapter(var todosList: List<Todo>) : Adapter<TodosAdapter.TodosViewHolder>() {
 

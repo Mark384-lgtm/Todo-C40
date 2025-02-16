@@ -1,4 +1,4 @@
-package com.pi.todosc40.utils
+package com.pi.todosc40
 
 import android.annotation.SuppressLint
 import android.app.DatePickerDialog
@@ -7,20 +7,21 @@ import androidx.appcompat.app.AppCompatActivity
 import com.pi.todosc40.database.MyDataBase
 import com.pi.todosc40.database.entity.Todo
 import com.pi.todosc40.databinding.ActivityEditTaskBinding
+import com.pi.todosc40.utils.clearTime
 import java.util.Calendar
 
 class EditTaskActivity : AppCompatActivity() {
 
-    lateinit var binding:ActivityEditTaskBinding
-    lateinit var todo:Todo
-    var selectedDay=Calendar.getInstance()
+    lateinit var binding: ActivityEditTaskBinding
+    lateinit var todo: Todo
+    var selectedDay = Calendar.getInstance()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding=ActivityEditTaskBinding.inflate(layoutInflater)
+        binding = ActivityEditTaskBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        todo=getTodoObject()
+        todo = getTodoObject()
         databinding(todo)
         initDatePickerDialog()
         initListeners()
@@ -31,12 +32,12 @@ class EditTaskActivity : AppCompatActivity() {
         binding.tflTitle.editText?.setText(todo.title)
         binding.tflTaskdetails.editText?.setText(todo.description)
 
-        val date=Calendar.getInstance()
-        date.timeInMillis=todo.date
-        val year=date.get(Calendar.YEAR)
-        val month=date.get(Calendar.MONTH)
-        val day=date.get(Calendar.DAY_OF_MONTH)
-        binding.selectDate.text="$day / ${month + 1} / $year"
+        val date = Calendar.getInstance()
+        date.timeInMillis = todo.date
+        val year = date.get(Calendar.YEAR)
+        val month = date.get(Calendar.MONTH)
+        val day = date.get(Calendar.DAY_OF_MONTH)
+        binding.selectDate.text = "$day / ${month + 1} / $year"
     }
 
     private fun initListeners() {
@@ -45,11 +46,10 @@ class EditTaskActivity : AppCompatActivity() {
             selectedDay.clearTime()
             val title = binding.tflTitle.editText!!.text.toString()
             val description = binding.tflTaskdetails.editText!!.text.toString()
-            todo.title=title
-            todo.description=description
-            todo.date=selectedDay.timeInMillis
+            todo.title = title
+            todo.description = description
+            todo.date = selectedDay.timeInMillis
             MyDataBase.getInstance(this).getTodosDao().updateTodo(todo)
-            onsavebuttonclick?.refresh()
             finish()
         }
 
@@ -101,16 +101,12 @@ class EditTaskActivity : AppCompatActivity() {
 
     @SuppressLint("NewApi")
     private fun getTodoObject(): Todo {
-        return intent.getParcelableExtra(ObjectTodo,Todo::class.java)!!
+        return intent.getParcelableExtra(ObjectTodo, Todo::class.java)!!
     }
 
-    companion object{
-        val ObjectTodo="todo object"
-        var onsavebuttonclick:EditTaskActivity.onSaveButtonClick?=null
-    }
-
-
-    fun interface onSaveButtonClick{
-        fun refresh()
+    companion object {
+        val ObjectTodo = "todo object"
     }
 }
+
+
